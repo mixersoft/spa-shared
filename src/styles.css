@@ -1,69 +1,32 @@
-/* Values (https://webpack.js.org/loaders/css-loader/#values) */
-@value v-color: steelblue;
 
-.container {
-  border: 1px solid v-color;
-  border-radius: 0.5rem;
-  bottom: 1rem;
-  font: inherit;
-  left: 1rem;
-  max-width: 280px;
-  padding: 1rem;
-  position: fixed;
-  transform: none;
-  transition: 350ms ease-in-out;
-}
-
-.hide {
-  transform: translateY(calc(100% + 1rem));
-}
-
-.m_0 {
-  margin: 0;
-}
-
-.mb_1 {
-  margin-bottom: 1rem;
-}
-
-.bg_blue {
-  background: v-color;
-}
-
-.py_1 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
-.px_2 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.rounded_1 {
-  border-radius: 0.5rem;
-}
-
-.border_none {
-  border: none;
-}
-
-.text_white {
-  color: #fff;
-}
-
-.text_base {
-  font-size: 1rem;
-}
-
-.flex {
+.navbar {
+  /* position: fixed; */
+  /* top: 0; */
+  /* left: 0; */
+  background-color: #111D4A;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  width: 100%;
+  height: 64px;
   display: flex;
-}
-
-.justify_end {
-  justify-content: flex-end;
-}
-
-.items_center {
   align-items: center;
+}
+.navbar ul {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  height: 100%;
+}
+.navbar li {
+  padding-right: 24px;
+  height: 100%;
+}
+.navbar li:hover {
+  opacity: 0.8;
+}
+.navbar a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
 }

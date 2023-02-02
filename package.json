@@ -1,11 +1,11 @@
 {
-  "name": "single-spa-html-js-example",
+  "name": "@ml/a_navbar",
   "version": "1.0.0",
-  "description": "An example of single-spa-html with plain JavaScript enhancement",
+  "description": "navbar",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "webpack serve",
+    "start": "webpack serve --port 9001 --env isLocal",
     "build": "webpack --mode=production"
   },
   "dependencies": {
