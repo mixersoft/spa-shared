@@ -1,6 +1,6 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const StandaloneSingleSpaPlugin = require("standalone-single-spa-webpack-plugin");
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
+// const StandaloneSingleSpaPlugin = require("standalone-single-spa-webpack-plugin");
 const packageJson = require("./package.json");
 
 const isAnyOf = (value, list) => list.includes(value);
@@ -31,10 +31,10 @@ module.exports = (env, argv) => {
             loader: "babel-loader",
           },
         },
-        {
-          test: /\.html$/i,
-          use: ["html-loader"],
-        },
+        // {
+        //   test: /\.html$/i,
+        //   use: ["html-loader"],
+        // },
         {
           test: /\.css$/i,
           use: [
@@ -53,14 +53,14 @@ module.exports = (env, argv) => {
         },
       ],
     },
-    plugins: [
-      // These plugins enable standalone mode for local development
-      !prodMode && new HtmlWebpackPlugin(),
-      new StandaloneSingleSpaPlugin({
-        appOrParcelName: packageJson.name,
-        disabled: prodMode,
-      }),
-    ].filter(Boolean),
+    // plugins: [
+    //   // These plugins enable standalone mode for local development
+    //   !prodMode && new HtmlWebpackPlugin(),
+    //   new StandaloneSingleSpaPlugin({
+    //     appOrParcelName: packageJson.name,
+    //     disabled: prodMode,
+    //   }),
+    // ].filter(Boolean),
     devtool: "source-map",
     devServer: {
       compress: true,
@@ -88,10 +88,13 @@ module.exports = (env, argv) => {
         const path = isAnyOf(publicPath, ["", "auto"]) ? "/" : publicPath;
 
         console.log(
-          `\n  ⚡️ single-spa application entry: ${protocol}${host}${port}${path}${filename}\n`
+          `\n  ⚡️ single-spa utility module entry: ${protocol}${host}${port}${path}${filename}\n`
         );
       },
     },
-    externals: ["single-spa"],
+    externals: [
+      "single-spa", 
+      /^@ml\/.+/
+    ],
   };
 };

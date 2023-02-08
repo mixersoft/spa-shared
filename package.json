@@ -1,11 +1,11 @@
 {
-  "name": "@ml/a_navbar",
+  "name": "@ml/shared",
   "version": "1.0.0",
-  "description": "navbar",
+  "description": "shared libs",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "webpack serve --port 9001 --env isLocal",
+    "start": "webpack serve --port 9002 --env isLocal",
     "build": "webpack --mode=production"
   },
   "dependencies": {
