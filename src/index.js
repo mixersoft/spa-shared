@@ -2,4 +2,4 @@
 /* re-export shared libs */
 
 // export * from "./duo-fr.js";
-export { __load, __setLangVisibility , transcriptId } from "./duo-fr.js";
+export { InteractivePlayer } from "./duo-fr.js";
