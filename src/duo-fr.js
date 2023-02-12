@@ -136,7 +136,7 @@ export class InteractivePlayer {
   onWordCompleteListenerId_ = null;
 
 
-  constructor(options){
+  constructor(options={}){
       Object.assign(this.config, DEFAULT_CONFIG, options);
   }
 
@@ -146,7 +146,7 @@ export class InteractivePlayer {
   async loadMedia(mediaProvider){
     let {transcriptEl} = this.config;  
     if (!transcriptEl){
-      transcriptId ||= this.config.transcriptId;
+      let transcriptId = this.config.transcriptId;
       transcriptEl = document.getElementById(transcriptId);
       Object.assign(this.config, {transcriptEl});
       if (!this.config.transcriptEl) console.error("Error: transcript element was not found")
@@ -239,7 +239,7 @@ export class InteractivePlayer {
       }
     }
     // debug
-    articleEl.myPlayer = document.getElementById(playerId)
+    articleEl.myPlayer = document.getElementById(this.config.playerId)
   }
 
   toggleLangVisibility(ev, className="hide-en"){
@@ -322,52 +322,5 @@ export class InteractivePlayer {
 }  // end class InteractivePlayer
 
 
-
-/* *** dev utils */
-/* **
-log timings for hyperaudioLite, add `?tag=1`
-works best on safari, on chrome, the player time is not updating at playback=1.9
-choose <article> => 'edit html' and copy/paste results
-*/
-function getUrlParameter(sParam) {
-  var sPageURL = window.location.search.substring(1),
-      sURLVariables = sPageURL.split('&'),
-      sParameterName,
-      i;
-
-  for (i = 0; i < sURLVariables.length; i++) {
-      sParameterName = sURLVariables[i].split('=');
-      if (sParameterName[0] === sParam) {
-          return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-      }
-  }
-  return false;
-};
-async function __logTimings(ev){
-
-  const FORCE_TAGGING = !!getUrlParameter('tag')
-  const PLAYBACK_RATE_FOR_TAGGING = 1.9
-  hal.myPlayer.player.playbackRate = PLAYBACK_RATE_FOR_TAGGING
-
-  const target = ev.target;
-  const dataMms = ev.target.getAttribute('data-m');
-  if (dataMms==="0" || dataMms===null || FORCE_TAGGING) {
-    ev.stopImmediatePropagation() // do not cue player
-    const playerCurrentTime = await hal.myPlayer.getTime();
-    const clip = ev.target.innerText.split(":")[1].substring(1,20)
-    if (dataMms!==null){
-      const click_offset = -1.00; // reflex delay in sec at speed 1.9x
-      const timeMs = (Math.round((playerCurrentTime+click_offset)*1000));
-      console.log(`"${clip}...", data-m="${timeMs}", was ${dataMms}`)
-      ev.target.setAttribute('data-m', timeMs)
-    } 
-  }
-}
-
-function __initTiming(){
-  if (!!getUrlParameter('tag')){
-    document.getElementById(transcriptId).querySelectorAll('[data-m]').forEach( el=>el.addEventListener("click", __logTimings) );
-  }
-}
 
 export { InteractivePlayer as default }
