@@ -213,7 +213,7 @@ export class InteractivePlayer {
   /**
    * play media on <ARTICLE> click
    */
-  playMediaOnClick(){
+  playMediaOnClick(stopListening=false){
     let {articleEl} = this.config;
     if (!articleEl){
       articleEl = this.config.transcriptEl.querySelector("article");
@@ -223,7 +223,7 @@ export class InteractivePlayer {
     const player = this.config.hal.myPlayer;
     const self = this;
     // register listener for "click" event
-    articleEl.onclick = async (ev)=>{
+    const handleClick = async (ev)=>{
       let action = await playPauseOnClick(ev, player) ;
       // console.warn(">>> action=", action)
       switch( action ){
@@ -238,8 +238,11 @@ export class InteractivePlayer {
           break;
       }
     }
+    const method = !stopListening ? 'addEventListener' : 'removeEventListener';
+    articleEl[method]("click", handleClick);
     // debug
     articleEl.myPlayer = document.getElementById(this.config.playerId)
+    return !stopListening;
   }
 
   toggleLangVisibility(ev, className="hide-en"){

@@ -53,7 +53,6 @@ export class HalEditor  {
     }
     this.transcriptEl = this.config.transcriptEl;
     this.player = this.config.hal.myPlayer;
-    this.toggleEdit();
   }
 
   logTimings = async (ev)=>{
@@ -76,13 +75,33 @@ export class HalEditor  {
     }
   }
   /**
-   * listens for clickEvent
+   * listen for halEditor click events
+   * 
+   * @param {*} force 
+   * @param {*} cb, (onChange hack) callback function to call in external scope 
+   * @returns 
    */
-  toggleEdit(){
-    this.isActive = !this.isActive;
+  toggleEdit(force=false, cb){
+    this.isActive = force ? force : !this.isActive;
+    if (typeof cb != "undefined") {
+      this.cb = cb;  // "register" callback
+    }
     const method = this.isActive ? 'addEventListener' : 'removeEventListener';
     this.transcriptEl.querySelectorAll('[data-m]').forEach( el=>el[method]("click", this.logTimings) );
-    return this.isActive;
+    // debug
+    window.check = this
+    switch (typeof this.cb ) {
+      case "function":
+        this.cb(this.isActive);
+        return this.isActive;
+      case "object": // thenable
+        return Promise.resolve(this.isActive).then( this.cb ).then( ()=>this.isActive );
+      case "undefined":
+          return this.isActive;
+      default:
+        this.cb = null;
+        return;
+    }
   }
 
 } // end class HypertranscriptTagger
