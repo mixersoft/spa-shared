@@ -121,16 +121,22 @@ export class HalEditor  {
       let curTime = await this.player.getTime();
       const dataMms = this.halTargetEl.getAttribute('data-m');
       
+      // TODO: need a separate changed and commit state, keySpace/keyEnter?
+      if (ev.code=="Enter"){
+        this.halTargetEl.classList.add('data-commit');
+        // remove attr0
+      }
+
       // replay clip at dataM for duration=REPLAY_DURATION_MS
       // audioFx: start of replay clip
-      this.audioFx.ding.play();  
+      await this.audioFx.click.play();
       this.player.setTime(dataMms/1000)
       this.player.play()
       console.log(`replay at data-m=${dataMms}`);
       clearTimeout(this.config._cancelReplayClip);
-      this.config._cancelReplayClip = setTimeout.bind(this)( ()=>{
+      this.config._cancelReplayClip = setTimeout.bind(this)( async ()=>{
         // audioFx: end of replay clip
-        this.audioFx.click.play();  
+        await this.audioFx.ding.play();  
         // then return to curTime after replay clip
         console.log("return to curTime=", Math.round(curTime*10)/10 );
         this.player.setTime(curTime);
@@ -157,6 +163,12 @@ export class HalEditor  {
     let curTimeMs = parseInt(targetEl.getAttribute(attr));
     const timeMs = Math.round(curTimeMs + deltaMs);
     const clip = targetEl.innerText.split(":")[1].substring(1,20)
+    // save orig value
+    const attr0 = `${attr}-0`;
+    if (!targetEl.hasAttribute(attr0)) {
+      targetEl.classList.add('data-changed');
+      targetEl.setAttribute(attr0, targetEl.getAttribute(attr));
+    }
     targetEl.setAttribute(attr, timeMs)
     console.log(`"${clip}...", ${attr}="${(timeMs)}", was ${(curTimeMs)}+${Math.round(deltaMs)}`)
     return timeMs;
