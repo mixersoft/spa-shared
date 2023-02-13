@@ -19,6 +19,16 @@ function getUrlParameter(sParam) {
   return false;
 };
 
+/**
+ * sound FX for UX
+ */
+const baseurl = "//localhost:9000";
+const audioFx = {
+  'ding': new Audio(`${baseurl}/src/66717__cj4096__bell.wav`),
+  'click': new Audio(`${baseurl}/src/448080__breviceps__wet-click.wav`),
+  'buzz': new Audio(`${baseurl}/src/28477__simmfoc__buzz-1.wav`),
+}
+
 export let doEdit = ()=> !!getUrlParameter('edit');
 
 /**
@@ -39,6 +49,7 @@ export class HalEditor  {
   config = {}
   transcriptEl;
   player;
+  audioFx;
   isActive = false;
   halTargetEl;    // span[data-m]
 
@@ -54,6 +65,9 @@ export class HalEditor  {
     }
     this.transcriptEl = this.config.transcriptEl;
     this.player = this.config.hal.myPlayer;
+    // preload audio
+    this.audioFx = audioFx;
+    Object.values(this.audioFx).forEach( el=>el.setAttribute('preload','auto'));
   }
 
   logTimings = async (ev)=>{
@@ -97,7 +111,7 @@ export class HalEditor  {
   }
 
   async _checkForReplay( ev ) {
-    const REPLAY_DURATION_MS=5000;
+    const REPLAY_DURATION_MS=3000;
     // bind this=HalEditor
     self = this;
     if (["Space", "Enter"].includes(ev.code)){
@@ -108,11 +122,15 @@ export class HalEditor  {
       const dataMms = this.halTargetEl.getAttribute('data-m');
       
       // replay clip at dataM for duration=REPLAY_DURATION_MS
+      // audioFx: start of replay clip
+      this.audioFx.ding.play();  
       this.player.setTime(dataMms/1000)
       this.player.play()
       console.log(`replay at data-m=${dataMms}`);
       clearTimeout(this.config._cancelReplayClip);
       this.config._cancelReplayClip = setTimeout.bind(this)( ()=>{
+        // audioFx: end of replay clip
+        this.audioFx.click.play();  
         // then return to curTime after replay clip
         console.log("return to curTime=", Math.round(curTime*10)/10 );
         this.player.setTime(curTime);
