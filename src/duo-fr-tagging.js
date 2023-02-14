@@ -1,3 +1,5 @@
+// import {timer} from "rxjs";
+
 const DEFAULT_CONFIG = {
   mediaProvider: "duo-fr",
   transcriptId: "hypertranscript",
